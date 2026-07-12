@@ -29,6 +29,11 @@ export LINKEX_BASE_URL="https://linkex.ai"
 3. For on-chain payment signing, install an x402-capable wallet skill —
    recommended: [binance-agentic-wallet](https://github.com/binance/binance-skills-hub/tree/main/skills/binance-web3/binance-agentic-wallet).
 
+> **First-time note**: binding the Binance wallet is a one-time QR scan in
+> the Binance App (the code expires in ~5 minutes, so have your phone ready).
+> After that the session persists — day-to-day payments only need a chat
+> confirmation, no scanning.
+
 ## What it does
 
 | Ask your agent...                          | It runs...                                  |

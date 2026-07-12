@@ -68,6 +68,13 @@ response contains an x402 v2 `PaymentRequired` challenge. To sign it:
   install only after a clear "yes".
 - Any other x402 v2 `exact`-scheme client also works.
 
+**Set expectations on first use**: if the wallet is not signed in yet, tell
+the user up front that a one-time pairing is needed — open the returned
+sign-in link, scan the QR with the Binance App, and verify the pairing code,
+all within its ~5 minute validity. The session then persists: subsequent
+payments only need a chat confirmation, no more scanning. Have the user
+ready before starting the sign-in, so the code does not expire mid-flow.
+
 The signer returns a base64 payment payload (`paymentHeaderValue`). Decode it
 and submit it as the JSON body of `POST /api/x402/pay/{orderId}` — see
 [x402-topup.md](references/x402-topup.md) for the exact steps.
