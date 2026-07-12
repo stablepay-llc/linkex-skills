@@ -68,12 +68,32 @@ response contains an x402 v2 `PaymentRequired` challenge. To sign it:
   install only after a clear "yes".
 - Any other x402 v2 `exact`-scheme client also works.
 
-**Set expectations on first use**: if the wallet is not signed in yet, tell
-the user up front that a one-time pairing is needed — open the returned
-sign-in link, scan the QR with the Binance App, and verify the pairing code,
-all within its ~5 minute validity. The session then persists: subsequent
-payments only need a chat confirmation, no more scanning. Have the user
-ready before starting the sign-in, so the code does not expire mid-flow.
+**First-use wallet onboarding — follow these rules, they prevent the most
+common failures:**
+
+1. **Have the user ready before generating the code.** The sign-in QR
+   expires in ~5 minutes. Ask the user to have their phone with the Binance
+   App unlocked BEFORE running `auth signin`, not after.
+2. **The sign-in link is for the DESKTOP browser only.** Opening it on the
+   phone shows an app-download page even when the Binance App is installed
+   (deep-link limitation). Instruct explicitly: open the link on the
+   computer, then scan the on-screen QR with the Binance App's scan icon
+   (top of the App home screen), and verify the pairing code.
+3. **If the web page shows no QR** (regional redirect / network issues),
+   generate the QR locally from the `urlForWeb` value and have the user
+   scan that image instead, e.g.:
+   `npx -y qrcode -o /tmp/wallet-qr.png -w 480 "<urlForWeb>" && open /tmp/wallet-qr.png`
+   (delete the file afterwards).
+4. **The agentic wallet starts EMPTY.** It is a fresh MPC wallet isolated
+   from the user's main Binance funds — that isolation is by design. After
+   sign-in, check `baw wallet balance` BEFORE creating any top-up order.
+   If the balance on the intended network cannot cover the payment, get the
+   address from `baw wallet address`, show the user the address for that
+   chain, and ask them to fund it (suggest the payment amount plus a small
+   buffer) — only create the order after funds have arrived, because orders
+   and signatures have short expiry windows.
+5. The session then persists: subsequent payments only need a chat
+   confirmation, no more scanning.
 
 The signer returns a base64 payment payload (`paymentHeaderValue`). Decode it
 and submit it as the JSON body of `POST /api/x402/pay/{orderId}` — see

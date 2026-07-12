@@ -9,6 +9,29 @@ wallet's own confirmation gate handle the signing consent.
 
 ---
 
+## Step 0 — Wallet readiness (do this BEFORE creating the order)
+
+Orders and signatures have short expiry windows; never create an order
+against a wallet that cannot pay it yet.
+
+```bash
+baw wallet status --json    # expect CONNECTED; otherwise run the sign-in flow first
+baw wallet balance --json   # check the intended network's token balance
+```
+
+If the balance on the target network is below the intended amount:
+
+```bash
+baw wallet address --json   # list per-chain addresses
+```
+
+Show the user the address for the target chain and ask them to fund it
+(payment amount plus a small buffer; on BNB Smart Chain the Permit2 approve
+gas is sponsored, so no native token is needed). Wait for the funds to
+arrive, re-check the balance, and only then proceed to Step 1.
+
+---
+
 ## Step 1 — Create a top-up order
 
 ```bash
