@@ -9,7 +9,7 @@ they roll out). No credit card, no human checkout.
 ## Install
 
 ```bash
-npx skills add stablepay-llc/linkex-skills/skills/linkex-agents-pay
+npx skills add binance/binance-skills-hub/skills/linkex-agents-pay
 ```
 
 Works with Claude Code, OpenClaw, and other skills-compatible agents.
@@ -46,6 +46,14 @@ export LINKEX_BASE_URL="https://linkex.ai"
 The skill never holds private keys. Payment signing happens in the user's own
 x402 wallet (e.g. Binance Agentic Wallet with MPC + per-day limits), and the
 agent confirms with the user before creating orders or signing anything.
+
+## Optional: automatic low-balance guard
+
+`scripts/balance-guard.sh` can run as a post-turn hook (e.g. Claude Code
+`Stop` hook) to warn whenever the key drops below `LINKEX_LOW_BALANCE_USD`
+(default $5) — even in conversations that never mention Linkex. The agent
+offers to set it up and installs it only with your consent; it checks at
+most once per 10 minutes, prints a single warning line, and never spends.
 
 ## Security
 
